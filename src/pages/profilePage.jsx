@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { getMyProfile } from "../api/profileApi";
 
 const ProfilePage = () => {
@@ -6,11 +6,15 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const fileInputRef = useRef(null);
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const data = await getMyProfile();
         setProfile(data);
+        setAvatarPreview(data.avatarUrl || null);
       } catch (err) {
         console.error(err);
         setError("Failed to load profile");
@@ -22,6 +26,30 @@ const ProfilePage = () => {
     fetchProfile();
   }, []);
 
+  const handleAvatarClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // افتح اختيار الملف
+    }
+  };
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const localUrl = URL.createObjectURL(file);
+
+    // نعرض الصورة فورًا (preview)
+    setAvatarPreview(localUrl);
+
+    // نحدّث profile في الـ state (فرونت بس دلوقتي)
+    setProfile((prev) => ({
+      ...prev,
+      avatarUrl: localUrl,
+    }));
+
+    // بعدين لما يبقى فيه API:
+    // هتبعت file للسيرفر وترجع URL حقيقي وتخزّنه بداله.
+  };
 
   if (loading) {
     return (
@@ -38,7 +66,6 @@ const ProfilePage = () => {
       </div>
     );
   }
-
 
   if (error || !profile) {
     return (
@@ -59,18 +86,14 @@ const ProfilePage = () => {
 
   return (
     <div className="h-screen w-screen text-[#EAEAEA]">
-      {/* الخلفية الأساسية بالـ gradient */}
+      {/* الخلفية */}
       <div className="relative h-full w-full bg-gradient-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
-        {/* glow layers */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1A0B3A_0%,#03030F_70%)] opacity-80" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_60%,rgba(45,15,92,0.35)_80%,rgba(3,3,15,0.6)_100%)]" />
 
-       
-       
         <div className="relative z-10 flex h-full w-full flex-col">
           {/* NAVBAR */}
           <header className="h-16 border-b border-[rgba(142,45,226,0.4)] bg-black/30 backdrop-blur-md px-4 md:px-10 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
-            {/* Logo  Title */}
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-md bg-gradient-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] shadow-[0_0_15px_rgba(142,45,226,0.7)]" />
               <div>
@@ -81,7 +104,6 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Right side */}
             <nav className="flex items-center gap-4 text-xs md:text-sm">
               <button className="uppercase tracking-wide text-[#EAEAEA] hover:text-[#00FFFF] transition">
                 Profile
@@ -98,15 +120,36 @@ const ProfilePage = () => {
           {/* MAIN CONTENT */}
           <main className="flex-1 flex items-center justify-center px-4 md:px-8 py-4">
             <div className="w-full max-w-5xl h-[85vh] mx-auto rounded-3xl border border-[rgba(142,45,226,0.5)] bg-[rgba(13,13,13,0.9)] px-5 py-6 md:px-8 md:py-8 backdrop-blur-md shadow-[0_0_30px_rgba(142,45,226,0.25)] overflow-y-auto">
-              {/* HEADER PROFILE */}
+              {/* PROFILE HEADER */}
               <div className="mb-8 flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
                 <div className="flex items-center gap-4">
-                  {/* Avatar */}
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] text-3xl font-bold text-[#0D0D0D] shadow-[0_0_20px_#8E2DE2]">
-                    {firstLetter}
+                  {/* Avatar + input مخفي */}
+                  <div className="relative">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      onChange={handleAvatarChange}
+                      className="hidden"
+                    />
+
+                    <div
+                      onClick={handleAvatarClick}
+                      className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-gradient-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] text-3xl font-bold text-[#0D0D0D] shadow-[0_0_20px_#8E2DE2] overflow-hidden"
+                      title="Click to change avatar"
+                    >
+                      {avatarPreview ? (
+                        <img
+                          src={avatarPreview}
+                          alt="Avatar"
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        firstLetter
+                      )}
+                    </div>
                   </div>
 
-                  {/* Info */}
                   <div>
                     <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
                       {profile.name}
@@ -116,7 +159,6 @@ const ProfilePage = () => {
                   </div>
                 </div>
 
-                {/* Edit button */}
                 <button className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#8E2DE2] to-[#00FFFF] px-5 py-2 text-sm font-bold uppercase tracking-[0.08em] text-[#0D0D0D] shadow-[0_0_15px_rgba(142,45,226,0.5)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_5px_25px_rgba(142,45,226,0.7)]">
                   Edit Profile
                 </button>
@@ -161,10 +203,10 @@ const ProfilePage = () => {
                   About
                 </h3>
                 <p className="text-sm text-[#EAEAEA]">
-                  I&apos;m using Athlos to stay consistent with my study and daily
-                  tasks. I like turning my homework and to-do list into small
-                  challenges with my friends, collecting points and keeping a daily
-                  streak.
+                  I&apos;m using Athlos to stay consistent with my study and
+                  daily tasks. I like turning my homework and to-do list into
+                  small challenges with my friends, collecting points and
+                  keeping a daily streak.
                 </p>
               </div>
 

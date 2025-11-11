@@ -7,6 +7,7 @@ export async function getMyProfile() {
     points: 1250,
     completedChallenges: 18,
     streak: 5,
+    avatarUrl: null,
     recentChallengesLeft: [
       { id: 1, title: "Finish React HW", status: "Completed" },
       { id: 2, title: "Math Assignment", status: "In Progress" },
