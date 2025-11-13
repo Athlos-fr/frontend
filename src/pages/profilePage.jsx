@@ -54,7 +54,7 @@ const ProfilePage = () => {
   if (loading) {
     return (
       <div className="h-screen w-screen text-[#EAEAEA]">
-        <div className="relative h-full w-full bg-gradient-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
+        <div className="relative h-full w-full bg-linear-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1A0B3A_0%,#03030F_70%)] opacity-80" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_60%,rgba(45,15,92,0.35)_80%,rgba(3,3,15,0.6)_100%)]" />
           <div className="relative z-10 flex h-full w-full items-center justify-center">
@@ -70,7 +70,7 @@ const ProfilePage = () => {
   if (error || !profile) {
     return (
       <div className="h-screen w-screen text-[#EAEAEA]">
-        <div className="relative h-full w-full bg-gradient-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
+        <div className="relative h-full w-full bg-linear-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1A0B3A_0%,#03030F_70%)] opacity-80" />
           <div className="relative z-10 flex h-full w-full items-center justify-center">
             <p className="text-sm text-[#FF00A0] bg-[rgba(255,0,160,0.15)] border-l-4 border-[#FF00A0] px-4 py-2 rounded-md shadow-[0_0_15px_rgba(255,0,160,0.3)]">
@@ -87,7 +87,7 @@ const ProfilePage = () => {
   return (
     <div className="h-screen w-screen text-[#EAEAEA]">
       {/* الخلفية */}
-      <div className="relative h-full w-full bg-gradient-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
+      <div className="relative h-full w-full bg-linear-to-br from-[#03030F] via-[#2D0F5C] to-[#050515]">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1A0B3A_0%,#03030F_70%)] opacity-80" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,transparent_60%,rgba(45,15,92,0.35)_80%,rgba(3,3,15,0.6)_100%)]" />
 
@@ -95,7 +95,7 @@ const ProfilePage = () => {
           {/* NAVBAR */}
           <header className="h-16 border-b border-[rgba(142,45,226,0.4)] bg-black/30 backdrop-blur-md px-4 md:px-10 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
             <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-md bg-gradient-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] shadow-[0_0_15px_rgba(142,45,226,0.7)]" />
+              <div className="h-8 w-8 rounded-md bg-linear-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] shadow-[0_0_15px_rgba(142,45,226,0.7)]" />
               <div>
                 <h1 className="text-lg font-bold tracking-wide">Athlos</h1>
                 <p className="text-[11px] text-[#00FFFF] uppercase tracking-[0.2em]">
@@ -135,7 +135,7 @@ const ProfilePage = () => {
 
                     <div
                       onClick={handleAvatarClick}
-                      className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-gradient-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] text-3xl font-bold text-[#0D0D0D] shadow-[0_0_20px_#8E2DE2] overflow-hidden"
+                      className="flex h-20 w-20 cursor-pointer items-center justify-center rounded-full bg-linear-to-tr from-[#8E2DE2] via-[#00FFFF] to-[#FF00A0] text-3xl font-bold text-[#0D0D0D] shadow-[0_0_20px_#8E2DE2] overflow-hidden"
                       title="Click to change avatar"
                     >
                       {avatarPreview ? (
@@ -154,12 +154,14 @@ const ProfilePage = () => {
                     <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
                       {profile.name}
                     </h2>
-                    <p className="text-sm text-[#00FFFF]">@{profile.username}</p>
+                    <p className="text-sm text-[#00FFFF]">
+                      @{profile.username}
+                    </p>
                     <p className="text-sm text-[#EAEAEA]">{profile.email}</p>
                   </div>
                 </div>
 
-                <button className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-[#8E2DE2] to-[#00FFFF] px-5 py-2 text-sm font-bold uppercase tracking-[0.08em] text-[#0D0D0D] shadow-[0_0_15px_rgba(142,45,226,0.5)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_5px_25px_rgba(142,45,226,0.7)]">
+                <button className="inline-flex items-center justify-center rounded-lg bg-linear-to-r from-[#8E2DE2] to-[#00FFFF] px-5 py-2 text-sm font-bold uppercase tracking-[0.08em] text-[#0D0D0D] shadow-[0_0_15px_rgba(142,45,226,0.5)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_5px_25px_rgba(142,45,226,0.7)]">
                   Edit Profile
                 </button>
               </div>
