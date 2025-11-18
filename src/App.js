@@ -22,4 +22,10 @@ function App() {
   );
 }
 
+import ProfilePage from "./pages/profilePage.jsx";
+
+function App() {
+  return <ProfilePage />;
+}
+
 export default App;
