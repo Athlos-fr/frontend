@@ -6,8 +6,8 @@ export async function getMyProfile() {
     email: "seif@example.com",
     points: 1250,
     completedChallenges: 18,
+    joinDate: "2024-03-21T00:00:00Z",
     streak: 5,
-    avatarUrl: null,
     recentChallengesLeft: [
       { id: 1, title: "Finish React HW", status: "Completed" },
       { id: 2, title: "Math Assignment", status: "In Progress" },
