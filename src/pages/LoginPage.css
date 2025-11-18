@@ -1,0 +1,86 @@
+/* Login Page Styles */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px 40px;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 480px;
+  background: rgba(13, 13, 13, 0.9);
+  padding: 40px;
+  border-radius: 15px;
+  border: 1px solid rgba(142, 45, 226, 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(142, 45, 226, 0.2);
+  animation: fadeInUp 0.5s ease;
+}
+
+.login-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  background: linear-gradient(45deg, var(--neon-purple), var(--cyan-blue));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+}
+
+.login-container form {
+  margin-bottom: 20px;
+}
+
+.forgot-password-wrapper {
+  text-align: right;
+  margin-bottom: 20px;
+  margin-top: -10px;
+}
+
+.forgot-password-link {
+  background: none;
+  border: none;
+  color: var(--cyan-blue);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+}
+
+.forgot-password-link:hover {
+  color: var(--lime);
+  text-decoration: underline;
+  text-shadow: 0 0 12px rgba(195, 255, 0, 0.5);
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.login-footer p {
+  margin: 10px 0;
+  color: var(--pure-white);
+  font-size: 14px;
+}
+
+/* Responsive */
+@media screen and (max-width: 540px) {
+  .login-container {
+    padding: 30px 20px;
+  }
+
+  .login-title {
+    font-size: 1.6rem;
+  }
+
+  .login-page {
+    padding: 90px 15px 30px;
+  }
+}

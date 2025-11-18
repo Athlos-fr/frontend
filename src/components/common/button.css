@@ -1,0 +1,126 @@
+/* Button Component Styles */
+.btn {
+  width: 100%;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* Primary Button */
+.btn-primary {
+  background: linear-gradient(45deg, var(--neon-purple), var(--cyan-blue));
+  color: var(--deep-black);
+  box-shadow: 0 0 20px rgba(142, 45, 226, 0.5);
+  border: 2px solid transparent;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 30px rgba(142, 45, 226, 0.7);
+  filter: brightness(1.1);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  background: transparent;
+  color: var(--cyan-blue);
+  border: 2px solid var(--cyan-blue);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--cyan-blue);
+  color: var(--deep-black);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+  transform: translateY(-2px);
+}
+
+/* Danger Button */
+.btn-danger {
+  background: linear-gradient(45deg, var(--magenta), #FF1744);
+  color: var(--pure-white);
+  box-shadow: 0 0 20px rgba(255, 0, 160, 0.4);
+}
+
+.btn-danger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 30px rgba(255, 0, 160, 0.6);
+  filter: brightness(1.1);
+}
+
+/* Loading State */
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner-circle {
+  opacity: 0.25;
+}
+
+.spinner-path {
+  opacity: 0.75;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+  .btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}

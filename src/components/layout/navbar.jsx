@@ -1,32 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import './navbar.css';
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import "./navbar.css";
 
 const Navbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [username, setUsername] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    const storedUsername = localStorage.getItem('username');
-    
-    if (token) {
-      setIsAuthenticated(true);
-      setUsername(storedUsername || 'User');
-    }
-  }, [location]);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    setIsAuthenticated(false);
-    setUsername('');
+    logout();
     setIsMobileMenuOpen(false);
-    navigate('/');
+    navigate("/");
   };
 
   const toggleMobileMenu = () => {
@@ -48,7 +34,7 @@ const Navbar = () => {
 
         {/* Mobile Menu Toggle */}
         <div className="menu-icon" onClick={toggleMobileMenu}>
-          <div className={isMobileMenuOpen ? 'hamburger active' : 'hamburger'}>
+          <div className={isMobileMenuOpen ? "hamburger active" : "hamburger"}>
             <span></span>
             <span></span>
             <span></span>
@@ -56,11 +42,13 @@ const Navbar = () => {
         </div>
 
         {/* Navigation Links */}
-        <ul className={isMobileMenuOpen ? 'nav-menu active' : 'nav-menu'}>
+        <ul className={isMobileMenuOpen ? "nav-menu active" : "nav-menu"}>
           <li className="nav-item">
-            <Link 
-              to="/" 
-              className={location.pathname === '/' ? 'nav-link active' : 'nav-link'}
+            <Link
+              to="/"
+              className={
+                location.pathname === "/" ? "nav-link active" : "nav-link"
+              }
               onClick={closeMobileMenu}
             >
               Home
@@ -70,9 +58,13 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <li className="nav-item">
-                <Link 
-                  to="/profile" 
-                  className={location.pathname === '/profile' ? 'nav-link active' : 'nav-link'}
+                <Link
+                  to="/profile"
+                  className={
+                    location.pathname === "/profile"
+                      ? "nav-link active"
+                      : "nav-link"
+                  }
                   onClick={closeMobileMenu}
                 >
                   Profile
@@ -81,14 +73,11 @@ const Navbar = () => {
               <li className="nav-item">
                 <span className="nav-username">
                   <span className="user-icon">👤</span>
-                  {username}
+                  {user?.username || "User"}
                 </span>
               </li>
               <li className="nav-item">
-                <button 
-                  className="nav-btn logout-btn" 
-                  onClick={handleLogout}
-                >
+                <button className="nav-btn logout-btn" onClick={handleLogout}>
                   Logout
                 </button>
               </li>
@@ -96,8 +85,8 @@ const Navbar = () => {
           ) : (
             <>
               <li className="nav-item">
-                <Link 
-                  to="/login" 
+                <Link
+                  to="/login"
                   className="nav-btn login-btn"
                   onClick={closeMobileMenu}
                 >
@@ -105,8 +94,8 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link 
-                  to="/signup" 
+                <Link
+                  to="/signup"
                   className="nav-btn signup-btn"
                   onClick={closeMobileMenu}
                 >
