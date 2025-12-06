@@ -1,127 +1,52 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import authService from '../services/authService';
-
-/**
- * Authentication Context
- * Manages global authentication state
- */
+import api from "../services/api";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  // Initialize auth state on mount
+  // 1. Check if user is already logged in (on page refresh)
   useEffect(() => {
-    const initAuth = () => {
+    const checkUser = async () => {
       try {
-        const currentUser = authService.getCurrentUser();
-        const token = authService.getToken();
-
-        if (currentUser && token) {
-          setUser(currentUser);
-          setIsAuthenticated(true);
-        }
+        // We try to fetch the profile.
+        // If cookie exists, this works. If not, it fails (401).
+        const { data } = await api.get("/users/me"); // We need to create this route later!
+        setUser(data.data);
       } catch (error) {
-        console.error('Error initializing auth:', error);
-        authService.clearAuthData();
+        setUser(null);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
 
-    initAuth();
+    // For now, since we don't have /users/me, we skip this check to avoid errors
+    setLoading(false);
+    // checkUser(); <-- Uncomment this when we add the /me route backend
   }, []);
 
-  /**
-   * Register new user
-   */
-  const register = async (userData) => {
-    try {
-      const response = await authService.register(userData);
-      const { user: newUser } = response.data;
-      
-      setUser(newUser);
-      setIsAuthenticated(true);
-      
-      return response;
-    } catch (error) {
-      throw error;
-    }
+  // 2. Login Action
+  const login = async (email, password) => {
+    const { data } = await api.post("/auth/login", { email, password });
+    setUser(data.data.user); // Store user data in React state
+    // Note: We don't save the token. The browser saved the cookie automatically!
+    return data;
   };
 
-  /**
-   * Login user
-   */
-  const login = async (credentials) => {
-    try {
-      const response = await authService.login(credentials);
-      const { user: loggedInUser } = response.data;
-      
-      setUser(loggedInUser);
-      setIsAuthenticated(true);
-      
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  /**
-   * Logout user
-   */
-  const logout = () => {
-    authService.logout();
+  // 3. Logout Action
+  const logout = async () => {
+    await api.post("/auth/logout");
     setUser(null);
-    setIsAuthenticated(false);
-  };
-
-  /**
-   * Update user profile
-   */
-  const updateProfile = async (userId, updateData) => {
-    try {
-      const response = await authService.updateProfile(userId, updateData);
-      const updatedUser = response.data;
-      
-      setUser(updatedUser);
-      
-      return response;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const value = {
-    user,
-    isAuthenticated,
-    isLoading,
-    register,
-    login,
-    logout,
-    updateProfile,
   };
 
   return (
-    <AuthContext.Provider value={value}>
-      {children}
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
 
-/**
- * Custom hook to use auth context
- */
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  
-  return context;
-};
-
-export default AuthContext;
+// Custom Hook to use the context easily
+export const useAuth = () => useContext(AuthContext);

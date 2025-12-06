@@ -1,31 +1,32 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-
-// Layouts
-import Layout from "./components/layout/layout";
-
-// Pages
-import HomePage from "./pages/HomePage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import ProfilePage from "./pages/ProfilePage";
+import DashboardPage from "./pages/DashboardPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <Routes>
-      {/* The Layout wrapper (Navbar + Footer) */}
-      <Route path="/" element={<Layout />}>
-        {/* Public Routes */}
-        <Route index element={<HomePage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="signup" element={<SignupPage />} />
+    <BrowserRouter>
+      <Routes>
+        {/* Public Route */}
+        <Route path="/login" element={<LoginPage />} />
 
         {/* Protected Routes */}
-        <Route path="profile" element={<ProfilePage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* Catch-all: Redirect unknown URLs to Home */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Route>
-    </Routes>
+        {/* Redirect root "/" to dashboard (which will redirect to login if needed) */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        {/* Catch-all 404 */}
+        <Route path="*" element={<div>404 Page Not Found</div>} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
