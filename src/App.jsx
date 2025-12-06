@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CreateCompetitionPage from "./pages/CreateCompetitionPage";
+import CompetitionDetailsPage from "./pages/CompetitionDetailsPage";
+import LogActivityPage from "./pages/LogActivityPage";
 
 function App() {
   return (
@@ -16,6 +19,33 @@ function App() {
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/create-competition"
+          element={
+            <ProtectedRoute>
+              <CreateCompetitionPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/competitions/:id"
+          element={
+            <ProtectedRoute>
+              <CompetitionDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/competitions/:id/log"
+          element={
+            <ProtectedRoute>
+              <LogActivityPage />
             </ProtectedRoute>
           }
         />
