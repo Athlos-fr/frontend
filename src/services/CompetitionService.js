@@ -43,4 +43,4 @@ const competitionService = {
   }
 };
 
-export default competitionService;
+export default CompetitionService;

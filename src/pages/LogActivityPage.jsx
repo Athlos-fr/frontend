@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import competitionService from "../services/competitionService";
+import competitionService from "../services/CompetitionService";
 
 const LogActivityPage = () => {
   const { id } = useParams();

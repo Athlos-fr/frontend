@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import competitionService from "../services/competitionService";
+import competitionService from "../services/CompetitionService";
 import { useNavigate } from "react-router-dom";
 
 const DashboardPage = () => {

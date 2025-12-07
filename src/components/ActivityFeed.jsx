@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import competitionService from "../services/competitionService";
+import competitionService from "../services/CompetitionService";
 
 const ActivityFeed = ({ competitionId }) => {
   const [logs, setLogs] = useState([]);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import competitionService from "../services/competitionService";
+import competitionService from "../services/CompetitionService";
 import { useNavigate } from "react-router-dom";
 
 const DiscoverPage = () => {

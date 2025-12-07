@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import competitionService from "../services/competitionService";
+import competitionService from "../services/CompetitionService";
 import { useAuth } from "../context/AuthContext";
 import ActivityFeed from "../components/ActivityFeed";
 
