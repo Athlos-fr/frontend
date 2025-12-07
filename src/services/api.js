@@ -1,6 +1,15 @@
 import axios from "axios";
 
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+// 1. Determine the domain from Environment Variables
+// Vercel sets VITE_API_URL to "https://sodal-api.onrender.com"
+// Localhost sets it to undefined (defaults to empty string)
+const domain = import.meta.env.VITE_API_URL || "";
+
+// 2. Construct the Base URL
+// We FORCE the "/api" prefix here.
+// Production Result: "https://sodal-api.onrender.com/api"
+// Localhost Result: "/api" (which hits the Vite Proxy)
+const BASE_URL = `${domain}/api`;
 
 const api = axios.create({
   baseURL: BASE_URL,
