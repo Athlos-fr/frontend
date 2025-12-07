@@ -11,7 +11,6 @@ const CompetitionDetailsPage = () => {
 
   const [competition, setCompetition] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchCompetition = async () => {
@@ -20,199 +19,186 @@ const CompetitionDetailsPage = () => {
         setCompetition(data.data);
       } catch (err) {
         console.error(err);
-        setError("Failed to load competition details");
       } finally {
         setLoading(false);
       }
     };
-
     fetchCompetition();
   }, [id]);
 
-  if (loading) return <div style={{ padding: "2rem" }}>Loading Arena...</div>;
-  if (error)
-    return <div style={{ padding: "2rem", color: "red" }}>{error}</div>;
-  if (!competition) return null;
+  if (!competition)
+    return (
+      <div className="p-8 text-center text-gray-500">Loading Arena...</div>
+    );
 
-  // Check if current user is in the competition
   const isParticipant = competition.participants.some(
     (p) => p.user._id === user._id || p.user === user._id
   );
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "800px", margin: "0 auto" }}>
+    <div className={styles.container}>
       <button
-        onClick={() => navigate("/dashboard")}
-        style={{
-          marginBottom: "1rem",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          color: "#666",
-        }}
+        onClick={() => navigate("/my-competitions")}
+        className={styles.backLink}
       >
-        ← Back to Dashboard
+        ← Back to Games
       </button>
 
-      {/* Header */}
-      <header
-        style={{
-          marginBottom: "2rem",
-          borderBottom: "1px solid #eee",
-          paddingBottom: "1rem",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h1 style={{ margin: 0 }}>{competition.title}</h1>
-          <span
-            style={{
-              background: competition.status === "active" ? "#e8f5e9" : "#eee",
-              color: competition.status === "active" ? "green" : "gray",
-              padding: "0.25rem 0.75rem",
-              borderRadius: "20px",
-              fontSize: "0.9rem",
-            }}
-          >
-            {competition.status.toUpperCase()}
-          </span>
-        </div>
-        <p style={{ color: "#666", marginTop: "0.5rem" }}>
-          Goal: {competition.winCondition.targetValue}{" "}
-          {competition.winCondition.metric}
-        </p>
-      </header>
+      {/* Hero Header */}
+      <div className={styles.hero.container}>
+        <div className={styles.hero.bgBlob}></div>
 
-      {/* Actions */}
-      <div style={{ marginBottom: "2rem" }}>
-        {isParticipant && competition.status === "active" && (
-          <button
-            onClick={() => navigate(`/competitions/${id}/log`)}
-            style={{
-              padding: "0.75rem 1.5rem",
-              background: "#28a745",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "1rem",
-            }}
-          >
-            + Log Activity
-          </button>
-        )}
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div>
+            <div className="flex gap-3 mb-4">
+              <span className={styles.hero.category}>
+                {competition.category}
+              </span>
+              <span className={styles.hero.status}>{competition.status}</span>
+            </div>
+            <h1 className={styles.hero.title}>{competition.title}</h1>
+            <p className="text-gray-400 text-lg">
+              Race to{" "}
+              <span className="text-white font-bold">
+                {competition.winCondition.targetValue}{" "}
+                {competition.winCondition.metric}
+              </span>
+            </p>
+          </div>
+
+          {isParticipant && competition.status === "active" && (
+            <button
+              onClick={() => navigate(`/competitions/${id}/log-activity`)}
+              className={styles.hero.actionBtn}
+            >
+              <span className="text-xl">+</span> Log Activity
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Leaderboard */}
-      <section>
-        <h3>Leaderboard</h3>
-        <div
-          style={{
-            border: "1px solid #e0e0e0",
-            borderRadius: "8px",
-            overflow: "hidden",
-          }}
-        >
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead style={{ background: "#f8f9fa" }}>
-              <tr>
-                <th
-                  style={{
-                    padding: "1rem",
-                    textAlign: "left",
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-                  Rank
-                </th>
-                <th
-                  style={{
-                    padding: "1rem",
-                    textAlign: "left",
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-                  Player
-                </th>
-                <th
-                  style={{
-                    padding: "1rem",
-                    textAlign: "right",
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-                  Score
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {competition.participants.map((p) => {
-                const isMe = p.user._id === user._id || p.user === user._id;
-                return (
-                  <tr
-                    key={p._id}
-                    style={{ background: isMe ? "#f0f7ff" : "white" }}
-                  >
-                    <td
-                      style={{
-                        padding: "1rem",
-                        borderBottom: "1px solid #eee",
-                      }}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Main Leaderboard */}
+        <div className="lg:col-span-2">
+          <h3 className={styles.sectionTitle}>🏆 Leaderboard</h3>
+          <div className={styles.table.container}>
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  <th className={styles.table.thLeft}>Rank</th>
+                  <th className={styles.table.thLeft}>Player</th>
+                  <th className={styles.table.thRight}>Score</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {competition.participants.map((p) => {
+                  const isMe = p.user._id === user._id || p.user === user._id;
+                  return (
+                    <tr
+                      key={p._id}
+                      className={
+                        isMe
+                          ? "bg-sodal-50/50"
+                          : "hover:bg-gray-50 transition-colors"
+                      }
                     >
-                      {p.rank === 1
-                        ? "🥇"
-                        : p.rank === 2
-                        ? "🥈"
-                        : p.rank === 3
-                        ? "🥉"
-                        : `#${p.rank}`}
-                    </td>
-                    <td
-                      style={{
-                        padding: "1rem",
-                        borderBottom: "1px solid #eee",
-                        fontWeight: isMe ? "bold" : "normal",
-                      }}
-                    >
-                      {p.user.username} {isMe && "(You)"}
-                    </td>
-                    <td
-                      style={{
-                        padding: "1rem",
-                        textAlign: "right",
-                        borderBottom: "1px solid #eee",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {p.currentScore}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      <td className={styles.table.td}>
+                        {p.rank === 1 ? (
+                          <span className="text-2xl">🥇</span>
+                        ) : p.rank === 2 ? (
+                          <span className="text-2xl">🥈</span>
+                        ) : p.rank === 3 ? (
+                          <span className="text-2xl">🥉</span>
+                        ) : (
+                          <span className="font-bold text-gray-400">
+                            #{p.rank}
+                          </span>
+                        )}
+                      </td>
+                      <td className={styles.table.td}>
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                              isMe
+                                ? "bg-sodal-200 text-sodal-700"
+                                : "bg-gray-100 text-gray-600"
+                            }`}
+                          >
+                            {p.user.username.charAt(0).toUpperCase()}
+                          </div>
+                          <span
+                            className={`font-medium ${
+                              isMe ? "text-sodal-900" : "text-gray-900"
+                            }`}
+                          >
+                            {p.user.username}{" "}
+                            {isMe && (
+                              <span className="text-xs text-sodal-500 bg-sodal-100 px-2 py-0.5 rounded-full ml-2">
+                                You
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                      </td>
+                      <td className={styles.table.tdRight}>
+                        <span className="text-lg font-bold text-gray-900">
+                          {p.currentScore}
+                        </span>
+                        <span className="text-xs text-gray-400 ml-1">
+                          {competition.winCondition.metric}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </section>
-      {/* --- NEW: Activity Feed Section --- */}
-      <section>
-        <h3>Recent Activity</h3>
-        <div
-          style={{
-            background: "#fafafa",
-            padding: "1.5rem",
-            borderRadius: "8px",
-          }}
-        >
-          <ActivityFeed competitionId={id} />
+
+        {/* Sidebar / Feed */}
+        <div className="lg:col-span-1">
+          <h3 className={styles.sectionTitle}>Recent Activity</h3>
+          <div className={styles.feedContainer}>
+            <ActivityFeed competitionId={id} />
+          </div>
         </div>
-      </section>
+      </div>
     </div>
   );
+};
+
+// --- STYLES ---
+const styles = {
+  container: "max-w-6xl mx-auto px-6 py-10",
+  backLink:
+    "mb-6 text-gray-400 hover:text-sodal-600 transition-colors font-medium flex items-center gap-2",
+  hero: {
+    container:
+      "bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12 text-white shadow-2xl mb-12 relative overflow-hidden",
+    bgBlob:
+      "absolute top-0 right-0 w-64 h-64 bg-sodal-500 rounded-full opacity-10 blur-3xl -mr-16 -mt-16",
+    category:
+      "bg-gray-700/50 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-sodal-300 border border-gray-600",
+    status:
+      "bg-sodal-500/20 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider text-sodal-300 border border-sodal-500/30",
+    title:
+      "text-4xl md:text-5xl font-extrabold mb-2 tracking-tight leading-tight",
+    actionBtn:
+      "bg-sodal-500 hover:bg-sodal-400 text-white px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-glow hover:-translate-y-1 transition-all duration-300 flex items-center gap-2",
+  },
+  sectionTitle: "text-xl font-bold text-gray-900 mb-6 flex items-center gap-2",
+  table: {
+    container:
+      "bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden",
+    thLeft:
+      "px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider",
+    thRight:
+      "px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider",
+    td: "px-6 py-4 whitespace-nowrap",
+    tdRight: "px-6 py-4 text-right",
+  },
+  feedContainer: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6",
 };
 
 export default CompetitionDetailsPage;

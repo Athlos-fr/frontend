@@ -1,60 +1,102 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
+import Layout from "./components/Layout";
 import ProtectedRoute from "./components/ProtectedRoute";
+import "./index.css";
+
+// Pages
+import LoginPage from "./pages/LoginPage";
+import DiscoverPage from "./pages/DiscoverPage";
+import MyCompetitionsPage from "./pages/MyCompetitionsPage";
 import CreateCompetitionPage from "./pages/CreateCompetitionPage";
 import CompetitionDetailsPage from "./pages/CompetitionDetailsPage";
 import LogActivityPage from "./pages/LogActivityPage";
+import ProfilePage from "./pages/ProfilePage";
+import FriendsPage from "./pages/FriendsPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Route */}
+        {/* PUBLIC ROUTES */}
+        {/* Login Page (No Navbar) */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected Routes */}
+        {/* APP LAYOUT ROUTES (With Navbar) */}
+        <Route element={<Layout />}>
+          {/* 1. Public Landing Page (Discover) */}
+          <Route path="/" element={<DiscoverPage />} />
+
+          {/* 2. Protected Pages */}
+          <Route
+            path="/my-competitions"
+            element={
+              <ProtectedRoute>
+                <MyCompetitionsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/friends"
+            element={
+              <ProtectedRoute>
+                <FriendsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/create-competition"
+            element={
+              <ProtectedRoute>
+                <CreateCompetitionPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/competitions/:id"
+            element={
+              <ProtectedRoute>
+                <CompetitionDetailsPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/competitions/:id/log"
+            element={
+              <ProtectedRoute>
+                <LogActivityPage />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+
+        {/* Redirects & 404 */}
+        {/* If user tries accessing /dashboard (old link), send them to My Competitions */}
         <Route
           path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
+          element={<Navigate to="/my-competitions" replace />}
         />
 
         <Route
-          path="/create-competition"
+          path="*"
           element={
-            <ProtectedRoute>
-              <CreateCompetitionPage />
-            </ProtectedRoute>
+            <div className="p-8 text-center text-gray-500">
+              404 - Page not found
+            </div>
           }
         />
-
-        <Route
-          path="/competitions/:id"
-          element={
-            <ProtectedRoute>
-              <CompetitionDetailsPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/competitions/:id/log"
-          element={
-            <ProtectedRoute>
-              <LogActivityPage />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Redirect root "/" to dashboard (which will redirect to login if needed) */}
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-
-        {/* Catch-all 404 */}
-        <Route path="*" element={<div>404 Page Not Found</div>} />
       </Routes>
     </BrowserRouter>
   );

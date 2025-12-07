@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+/* Your custom styles */
+body {
+  @apply bg-gray-50 text-gray-800 antialiased;
+  /* Smooth scrolling for the whole app */
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar for a premium feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #a7f3d0; /* Mint scrollbar */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981;
+}

@@ -13,13 +13,8 @@ const DashboardPage = () => {
 
   useEffect(() => {
     const fetchCompetitions = async () => {
-      console.log("Dashboard: Starting fetch..."); // Debug Log
       try {
         const data = await competitionService.getAllCompetitions();
-        console.log("Dashboard: Data received", data); // Debug Log
-
-        // Ensure we are setting the array correctly based on backend response structure
-        // Backend sends: { success: true, data: { competitions: [...] } }
         const compList = data.data?.competitions || [];
         setCompetitions(compList);
       } catch (err) {
@@ -34,179 +29,156 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
+    <div className={styles.container}>
       {/* Header Section */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "2rem",
-          alignItems: "center",
-          borderBottom: "1px solid #eee",
-          paddingBottom: "1rem",
-        }}
-      >
+      <header className={styles.header.wrapper}>
         <div>
-          <h1 style={{ margin: 0 }}>Welcome, {user?.username}! 🏆</h1>
-          <p style={{ color: "gray", margin: "0.5rem 0 0 0" }}>
-            Ready to compete?
-          </p>
+          <h1 className={styles.header.title}>Welcome, {user?.username}! 🏆</h1>
+          <p className={styles.header.subtitle}>Ready to compete?</p>
         </div>
-        <button
-          onClick={logout}
-          style={{
-            padding: "0.5rem 1rem",
-            cursor: "pointer",
-            backgroundColor: "#f8f9fa",
-            border: "1px solid #ddd",
-            borderRadius: "4px",
-          }}
-        >
+        <button onClick={logout} className={styles.header.logoutBtn}>
           Logout
         </button>
       </header>
 
       {/* Main Content */}
       <section>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <h3>Available Competitions</h3>
+        <div className={styles.controls.wrapper}>
+          <h3 className={styles.controls.title}>Available Competitions</h3>
           <button
             onClick={() => navigate("/create-competition")}
-            style={{
-              padding: "0.5rem 1rem",
-              background: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
+            className={styles.controls.createBtn}
           >
             + Create New
           </button>
         </div>
 
         {/* Loading State */}
-        {loading && <p>Loading games...</p>}
-
-        {/* Error State */}
-        {error && (
-          <div
-            style={{
-              color: "red",
-              background: "#fff0f0",
-              padding: "1rem",
-              borderRadius: "4px",
-            }}
-          >
-            {error}
+        {loading && (
+          <div className={styles.grid}>
+            {[1, 2, 3].map((i) => (
+              <div key={i} className={styles.loadingCard}></div>
+            ))}
           </div>
         )}
 
+        {/* Error State */}
+        {error && <div className={styles.error}>{error}</div>}
+
         {/* Empty State */}
         {!loading && !error && competitions.length === 0 && (
-          <div
-            style={{
-              textAlign: "center",
-              padding: "3rem",
-              background: "#f9f9f9",
-              borderRadius: "8px",
-            }}
-          >
-            <p>No competitions found. Create one to get started!</p>
+          <div className={styles.emptyState}>
+            <p className="text-gray-500 mb-4">
+              No competitions found. Create one to get started!
+            </p>
+            <button
+              onClick={() => navigate("/create-competition")}
+              className="text-sodal-600 font-bold hover:underline"
+            >
+              Create First Game
+            </button>
           </div>
         )}
 
         {/* List of Competitions */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: "1.5rem",
-          }}
-        >
+        <div className={styles.grid}>
           {competitions.map((comp) => (
-            <div
-              key={comp._id || comp.id}
-              style={{
-                border: "1px solid #e0e0e0",
-                padding: "1.5rem",
-                borderRadius: "8px",
-                background: "white",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-              }}
-            >
-              <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.2rem" }}>
-                {comp.title}
-              </h4>
+            <div key={comp._id || comp.id} className={styles.card.container}>
+              {/* Decorative Blob */}
+              <div className={styles.card.blob}></div>
 
-              <div
-                style={{ display: "flex", gap: "0.5rem", marginBottom: "1rem" }}
-              >
-                <span
-                  style={{
-                    background: "#e3f2fd",
-                    color: "#0d47a1",
-                    padding: "0.2rem 0.5rem",
-                    borderRadius: "4px",
-                    fontSize: "0.8rem",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {comp.category}
-                </span>
-                <span
-                  style={{
-                    background:
-                      comp.status === "active" ? "#e8f5e9" : "#fafafa",
-                    color: comp.status === "active" ? "#1b5e20" : "#757575",
-                    padding: "0.2rem 0.5rem",
-                    borderRadius: "4px",
-                    fontSize: "0.8rem",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {comp.status}
-                </span>
+              <div className="relative z-10 flex flex-col h-full">
+                <div className="flex justify-between items-start mb-4">
+                  <h4 className={styles.card.title}>{comp.title}</h4>
+                  {comp.status === "active" && (
+                    <span className="flex h-2.5 w-2.5 mt-1.5">
+                      <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-sodal-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-sodal-500"></span>
+                    </span>
+                  )}
+                </div>
+
+                <div className="flex gap-2 mb-4">
+                  <span className={styles.card.tag}>{comp.category}</span>
+                  <span
+                    className={
+                      comp.status === "active"
+                        ? styles.card.tagActive
+                        : styles.card.tag
+                    }
+                  >
+                    {comp.status}
+                  </span>
+                </div>
+
+                <p className={styles.card.meta}>
+                  <strong>Goal:</strong>{" "}
+                  {comp.winCondition?.targetValue || "Max"}{" "}
+                  {comp.winCondition?.metric}
+                </p>
+
+                <div className="mt-auto pt-4">
+                  <button
+                    onClick={() =>
+                      navigate(`/competitions/${comp._id || comp.id}`)
+                    }
+                    className={styles.card.button}
+                  >
+                    View Leaderboard
+                  </button>
+                </div>
               </div>
-
-              <p
-                style={{
-                  margin: "0 0 1rem 0",
-                  fontSize: "0.9rem",
-                  color: "#666",
-                }}
-              >
-                <strong>Goal:</strong> {comp.winCondition?.targetValue || "Max"}{" "}
-                {comp.winCondition?.metric}
-              </p>
-
-              <button
-                onClick={() => navigate(`/competitions/${comp._id || comp.id}`)}
-                style={{
-                  width: "100%",
-                  padding: "0.5rem",
-                  background: "white",
-                  border: "1px solid #007bff",
-                  color: "#007bff",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              >
-                View Leaderboard
-              </button>
             </div>
           ))}
         </div>
       </section>
     </div>
   );
+};
+
+// --- STYLES ---
+const styles = {
+  container: "max-w-7xl mx-auto px-6 py-12",
+
+  header: {
+    wrapper:
+      "flex justify-between items-end mb-12 border-b border-gray-100 pb-8",
+    title: "text-4xl font-extrabold text-gray-900 tracking-tight",
+    subtitle: "text-gray-500 mt-2 font-medium text-lg",
+    logoutBtn:
+      "px-6 py-2.5 bg-white border border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:text-red-500 transition-colors shadow-sm",
+  },
+
+  controls: {
+    wrapper: "flex justify-between items-center mb-8",
+    title: "text-2xl font-bold text-gray-800",
+    createBtn:
+      "bg-sodal-500 text-white px-6 py-2.5 rounded-xl font-bold shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all duration-300",
+  },
+
+  grid: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+
+  loadingCard: "h-64 bg-gray-100 rounded-3xl animate-pulse",
+
+  error:
+    "bg-red-50 text-red-600 p-4 rounded-xl mb-8 border border-red-100 text-center font-medium",
+
+  emptyState:
+    "text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200",
+
+  card: {
+    container:
+      "group bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-sodal-500/10 hover:border-sodal-200 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden",
+    blob: "absolute top-0 right-0 w-32 h-32 bg-sodal-50 rounded-full -mr-10 -mt-10 group-hover:bg-sodal-100 transition-colors duration-300",
+    title:
+      "text-xl font-bold text-gray-900 group-hover:text-sodal-600 transition-colors line-clamp-1",
+    tag: "bg-gray-50 text-gray-500 text-xs font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide border border-gray-100",
+    tagActive:
+      "bg-green-50 text-green-600 text-xs font-bold px-2.5 py-1 rounded-lg uppercase tracking-wide border border-green-100",
+    meta: "text-gray-500 text-sm mb-2",
+    button:
+      "w-full py-2.5 rounded-xl text-sodal-600 font-bold bg-sodal-50 hover:bg-sodal-500 hover:text-white transition-all duration-200",
+  },
 };
 
 export default DashboardPage;
