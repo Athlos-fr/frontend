@@ -1,9 +1,10 @@
 import axios from "axios";
 
-// Create a standalone instance
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+
 const api = axios.create({
-  baseURL: "/api", // We don't need localhost:3000 because of the Proxy!
-  withCredentials: true, // IMPORTANT: This tells the browser to send Cookies with requests
+  baseURL: BASE_URL,
+  withCredentials: true, // Vital for Cookies to work across domains
   headers: {
     "Content-Type": "application/json",
   },
