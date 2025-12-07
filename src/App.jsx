@@ -12,12 +12,15 @@ import CompetitionDetailsPage from "./pages/CompetitionDetailsPage";
 import LogActivityPage from "./pages/LogActivityPage";
 import ProfilePage from "./pages/ProfilePage";
 import FriendsPage from "./pages/FriendsPage";
+import SignupPage from "./pages/SignupPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* PUBLIC ROUTES */}
+        {/* Signup Page (No Navbar) */}
+        <Route path="/signup" element={<SignupPage />} />
         {/* Login Page (No Navbar) */}
         <Route path="/login" element={<LoginPage />} />
 

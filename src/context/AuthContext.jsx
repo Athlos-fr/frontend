@@ -27,11 +27,21 @@ export const AuthProvider = ({ children }) => {
     // checkUser(); <-- Uncomment this when we add the /me route backend
   }, []);
 
+
+  const register = async (username, email, password) => {
+    const { data } = await api.post("/auth/register", {
+      username,
+      email,
+      password,
+    });
+    setUser(data.data.user);
+    return data;
+  };
+
   // 2. Login Action
   const login = async (email, password) => {
     const { data } = await api.post("/auth/login", { email, password });
     setUser(data.data.user); // Store user data in React state
-    // Note: We don't save the token. The browser saved the cookie automatically!
     return data;
   };
 
@@ -42,7 +52,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, register, login, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
