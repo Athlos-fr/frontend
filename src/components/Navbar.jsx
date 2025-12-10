@@ -107,7 +107,7 @@ const styles = {
     "w-9 h-9 bg-gradient-to-tr from-sodal-400 to-teal-500 rounded-full flex items-center justify-center text-white font-bold shadow-md",
   logoutBtn: "text-gray-400 hover:text-red-500 transition-colors p-2",
   loginBtn:
-    "bg-sodal-500 text-white px-6 py-2.5 rounded-xl font-bold shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all duration-300",
+    "bg-sodal-500 text-black px-6 py-2.5 rounded-xl font-bold shadow-soft hover:shadow-glow hover:-translate-y-0.5 transition-all duration-300",
 };
 
 export default Navbar;

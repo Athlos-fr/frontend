@@ -102,7 +102,7 @@ const styles = {
     "w-full px-5 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-4 focus:ring-sodal-100 focus:border-sodal-400 transition-all text-gray-900 bg-gray-50 focus:bg-white font-medium",
 
   button:
-    "w-full py-3.5 rounded-xl text-white font-bold bg-sodal-500 hover:bg-sodal-600 focus:ring-4 focus:ring-sodal-200 transition-all duration-200 shadow-lg hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed",
+    "w-full py-3.5 rounded-xl text-black font-bold bg-sodal-500 hover:bg-sodal-600 focus:ring-4 focus:ring-sodal-200 transition-all duration-200 shadow-lg hover:shadow-glow hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed",
 
   footer: "text-center text-gray-400 text-sm mt-8 font-medium",
 };
